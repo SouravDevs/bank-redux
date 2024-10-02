@@ -1,50 +1,43 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { withdrawlBalance } from '../../store'
+import { withdrawlBalance } from '../../store/Slices/cartSlice'
 
 function Withdrawl() {
+  // access of nav data
+  const location = useLocation()
+  const {username, pin} = location.state
+
+  // useStates
   const [amount, setAmount] = useState('')
-  const [pin, setPin] = useState('')
+  const [PIN, setPIN] = useState('')
 
-  // Access nav's data
-   const location = useLocation()
-  const username = location.state
-
-  // useSelector
-  const users = useSelector((state) => state.userData)
   const dispatch = useDispatch()
-  
-  // handle Withdrawl
-  const withdrawl = () => {
-    const checkPIN = users.find((user) => user.username === username && user.pin === pin)
-    if(checkPIN) {
-      dispatch(withdrawlBalance(username, amount))
-    }
-    else {
-      alert("PIN is incorrect.")
-    }
-  }
   return (
-    <div className='flex flex-col items-center w-[500px] h-auto py-8 bg-slate-300 rounded-lg'>
-    <h1 className='text-2xl font-medium'>Withdarwl</h1>
-    <div className='mt-5'>
-        <label className='text-xl font-medium' htmlFor="">Enter amount : </label>
-        <input className='pl-3 border-none outline-none px-3 py-1 rounded-md'
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-         type="text" placeholder='Enter amount' />
+    <div className='w-[320px] sm:w-[500px] h-auto flex items-center flex-col pt-5 pb-10 gap-3 bg-blue-500 rounded-md'>
+      <h1 className='text-xl font-semibold'>Deposit</h1>
+      {/* Form */}
+      <div>
+        <label className='font-semibold' htmlFor="">Enter amount : </label>
+        <input className='text-center' value={amount} onChange={(e) => setAmount(e.target.value)} type="text" placeholder='1000' />
+      </div>
+      <div>
+        <label className='font-semibold' htmlFor="">Enter PIN : </label>
+        <input className='text-center' value={PIN} onChange={(e) => setPIN(e.target.value)} type="text" placeholder='1000' />
+      </div>
+      <button onClick={() => {
+        if(pin === parseInt(PIN)) {
+          dispatch(withdrawlBalance({username,pin, amount}))
+          setAmount('')
+          setPIN('')
+        }
+        else {
+          alert("Wrong PIN")
+          console.log(PIN)
+        }
+       
+      }} className='px-20 py-1 bg-white rounded-md active:bg-slate-300'>Withdrawl</button>
     </div>
-    <div className='mt-3'>
-        <label className='text-xl font-medium' htmlFor="">Enter PIN : </label>
-        <input className='pl-3 border-none outline-none px-3 py-1 rounded-md'
-           value={pin}
-           onChange={(e) => setPin(e.target.value)} 
-        type="text" placeholder='1234' />
-    </div>
-
-        <button onClick={withdrawl} className='px-10 py-1 bg-sky-700 rounded-md text-white mt-5 opacity-90 hover:opacity-100'>Withdrawl</button>
-</div>
   )
 }
 

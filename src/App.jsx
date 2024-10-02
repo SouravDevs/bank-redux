@@ -1,12 +1,15 @@
 import { Outlet } from 'react-router-dom'
 import './App.css'
+import Header from './components/Header'
+
 
 function App() {
   return (
     <>
-      <div className='flex flex-col justify-center items-center min-w-[100vw] min-h-[100vh]'>
-      <Outlet />
-      </div>
+    <Header />
+    <div className='w-[100vw] h-[100vh] flex flex-col justify-center items-center overflow-hidden'>
+    <Outlet />
+    </div>
     </>
   )
 }

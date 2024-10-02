@@ -1,61 +1,39 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { changePin } from '../../store'
+import { changePIN } from '../../store/Slices/cartSlice'
 
 function ChangePIN() {
-  const [pin, setPin] = useState('')
+  // access of nav data
+  const location = useLocation()
+  const {username, pin} = location.state
+
+  // useStates
+  const [PIN, setPIN] = useState('')
   const [newPin, setNewPin] = useState('')
-  const [confirmPin, setConfirmPin] = useState('')
 
-    // Access nav's data
-    const location = useLocation()
-    const username = location.state
-  
-    // useSelector
-    const users = useSelector((state) => state.userData)
-    const dispatch = useDispatch()
-
-    // Handle Change-PIN
-    const changePIN = () => {
-      const checkPIN = users.find((user) => user.username === username && user.pin === pin)
-      if(checkPIN) {
-        if(newPin === confirmPin) {
-          dispatch(changePin(username,newPin))
+  const dispatch = useDispatch()
+  return (
+    <div className='w-[320px] sm:w-[500px] h-auto flex items-center flex-col pt-5 pb-10 gap-3 bg-blue-500 rounded-md'>
+    <h1 className='text-xl font-semibold'>Change PIN</h1>
+    {/* Form */}
+    <div>
+      <label className='font-semibold' htmlFor="">Enter Old PIN : </label>
+      <input className='text-center' value={PIN} onChange={(e) => setPIN(e.target.value)} type="text" placeholder='1000' />
+    </div>
+    <div>
+      <label className='font-semibold' htmlFor="">Enter New PIN : </label>
+      <input className='text-center' value={newPin} onChange={(e) => setNewPin(e.target.value)} type="text" placeholder='1000' />
+    </div>
+    <button onClick={() => {
+        if(pin === parseInt(PIN)) {
+          dispatch(changePIN({username, pin, newPin}))
         }
         else {
-          alert("New PIN & Confirm PIN must be matched.")
+          alert('Wrong PIN')
         }
-      }
-      else {
-        alert('Wrong PIN')
-      }
-    }
-  
-  return (
-    <div className='flex flex-col items-center w-[500px] h-auto py-8 bg-slate-300 rounded-lg'>
-    <h1 className='text-2xl font-medium'>Change PIN</h1>
-    <div className='mt-5'>
-        <label className='text-xl font-medium' htmlFor="">Old PIN : </label>
-        <input className='pl-3 border-none outline-none px-3 py-1 rounded-md'
-        value={pin} onChange={(e) => setPin(e.target.pin)}
-         type="text" placeholder='Old PIN' />
-    </div>
-    <div className='mt-3'>
-        <label className='text-xl font-medium' htmlFor="">New PIN : </label>
-        <input className='pl-3 border-none outline-none px-3 py-1 rounded-md'
-        value={newPin} onChange={(e) => setNewPin(e.target.pin)}
-        type="text" placeholder='New PIN' />
-    </div>
-    <div className='mt-3'>
-        <label className='text-xl font-medium' htmlFor="">Confirm New PIN : </label>
-        <input className='pl-3 border-none outline-none px-3 py-1 rounded-md'
-          value={confirmPin} onChange={(e) => setConfirmPin(e.target.pin)}
-        type="text" placeholder='Confirm New PIN' />
-    </div>
-
-        <button onClick={changePIN} className='px-10 py-1 bg-sky-700 rounded-md text-white mt-5 opacity-90 hover:opacity-100'>Withdrawl</button>
-</div>
+    }} className='px-20 py-1 bg-white rounded-md mt-3 active:bg-slate-300'>Change PIN</button>
+  </div>
   )
 }
 

@@ -1,34 +1,29 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { depositBalance } from '../../store'
+import { depositBalance } from '../../store/Slices/cartSlice'
 
 function Deposit() {
-  const [amount, setAmount] = useState('')
-  const dispatch = useDispatch()
-
-  // Access nav's data
+  // access of nav data
   const location = useLocation()
-  const username = location.state
-  console.log(username)
+  const {username} = location.state
 
-  // Handle Deposit
-  const deposit = () => {
-    dispatch(depositBalance(username, amount))
-    setAmount('')
-  }
+  const dispatch = useDispatch()
+  
+  // useStates
+  const [amount, setAmount] = useState('')
   return (
-    <div className='flex flex-col items-center w-[500px] h-auto py-8 bg-slate-300 rounded-lg'>
-        <h1 className='text-2xl font-medium'>Deposit</h1>
-        <div className='mt-5'>
-            <label className='text-xl font-medium' htmlFor="">Enter amount : </label>
-            <input className='pl-3 border-none outline-none px-3 py-1 rounded-md' 
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            type="text" placeholder='Enter amount' />
-        </div>
-
-            <button onClick={deposit} className='px-10 py-1 bg-sky-700 rounded-md text-white mt-5 opacity-90 hover:opacity-100'>Deposit</button>
+    <div className='w-[320px] sm:w-[500px] h-auto flex items-center flex-col pt-5 pb-10 gap-3 bg-blue-500 rounded-md'>
+      <h1 className='text-xl font-semibold'>Deposit</h1>
+      {/* Form */}
+      <div>
+        <label className='font-semibold' htmlFor="">Enter amount : </label>
+        <input className='text-center' value={amount} onChange={(e) => setAmount(e.target.value)} type="text" placeholder='1000' />
+      </div>
+      <button onClick={() => {
+        dispatch(depositBalance({username,amount}))
+        setAmount('')
+      }} className='px-20 py-1 bg-white rounded-md active:bg-slate-300'>Deposit</button>
     </div>
   )
 }

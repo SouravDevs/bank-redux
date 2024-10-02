@@ -1,97 +1,56 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { addNewUser } from "../store";
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { addUser } from '../store/Slices/cartSlice'
 
 function SignUp() {
-  const dispatch = useDispatch()
-  const randomAccNumber = Math.floor(
-    100000000000 + Math.random() * 900000000000
-  );
-  // Declares states
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [balance, setBalance] = useState("");
-  const [PIN, setPIN] = useState("");
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [amount, setAmount] = useState('')
+    const [pin, setPin] = useState('')
 
-  // Handle Navigate
-  const nav = useNavigate()
+    const id = Math.floor(1000 + Math.random() * 9000)
+const accNo = Math.floor(100000000000 + Math.random() * 900000000000)
 
-  // handle onChange
-  const register = () => {
-  if(username && password && balance && PIN) {
-    dispatch(addNewUser(username, password, randomAccNumber,parseInt(balance),PIN))
-    nav('/signin')
-  }
-  else {
-    alert("Fill all the blanks")
-  }
-  }
+    const dispatch = useDispatch()
+    const nav = useNavigate()
 
   return (
-    <div className="w-[500px] h-auto py-5 flex flex-col items-center bg-slate-400 rounded-md">
-      <h1 className="text-2xl font-semibold">Sign Up</h1>
-      <div className="flex flex-col gap-3 mt-3">
-        <div>
-          <label className="text-[20px]" htmlFor="">
-            Username :{" "}
-          </label>
-          <input
-            className="rounded-sm border-none outline-none pl-3 text-[18px]"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-          />
+    <div className='w-[320px] sm:w-[550px] h-[auto] pt-3 pb-7 bg-blue-500 flex flex-col items-center rounded-md'>
+        <h1 className='text-2xl sm:text-3xl font-semibold'>Sign Up</h1>
+        {/*Form Container */}
+        <div className='flex flex-col gap-3 mt-5'>
+            {/* Form */}
+            <div>
+                <label className='text-xl sm:text-2xl' htmlFor="">Username: </label>
+                <input className='pl-2 sm:text-[18px]' value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder='Username' />
+            </div>
+            {/* Form */}
+            <div>
+                <label className='text-xl sm:text-2xl' htmlFor="">Password: </label>
+                <input className='pl-2 sm:text-[18px]' value={password} onChange={(e) => setPassword(e.target.value)} type="text" placeholder='Password' />
+            </div>
+            {/* Form */}
+            <div>
+                <label className='text-xl sm:text-2xl' htmlFor="">PIN: </label>
+                <input className='pl-2 sm:text-[18px]' value={pin} onChange={(e) => setPin(e.target.value)} type="text" placeholder='PIN' />
+            </div>
+            {/* Form */}
+            <div>
+                <label className='text-xl sm:text-2xl' htmlFor="">Amount: </label>
+                <input className='pl-2 sm:text-[18px]' value={amount} onChange={(e) => setAmount(e.target.value)} type="text" placeholder='Amount' />
+            </div>
+
+            <button className='font-semibold mt-3 sm:py-2 bg-slate-300 py-1 rounded-md' onClick={() => {
+                dispatch(addUser({username,password,pin,amount,id,accNo}))
+                nav('/login')
+
+            }}>Sign Up</button>
+            <p className='font-semibold text-center'>Already have an account? <Link className='text-white' to={'/login'}>Sign In</Link></p>
+            
         </div>
-        <div>
-          <label className="text-[20px]" htmlFor="">
-            Password :{" "}
-          </label>
-          <input
-            className="rounded-sm border-none outline-none pl-3 text-[18px]"
-            type="text"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-        </div>
-        <div>
-          <label className="text-[20px]" htmlFor="">
-            Balance :{" "}
-          </label>
-          <input
-            className="rounded-sm border-none outline-none pl-3 text-[18px]"
-            type="text"
-            value={balance}
-            onChange={(e) => setBalance(e.target.value)}
-            placeholder="Balance"
-          />
-        </div>
-        <div>
-          <label className="text-[20px]" htmlFor="">
-            PIN :{" "}
-          </label>
-          <input
-            className="rounded-sm border-none outline-none pl-3 text-[18px]"
-            type="text"
-            value={PIN}
-            onChange={(e) => setPIN(e.target.value)}
-            placeholder="PIN"
-          />
-        </div>
-      </div>
-      <button onClick={register} className="px-14 py-1 font-bold bg-orange-400 mt-5 rounded-md">
-        Sign Up
-      </button>
-      <p className="pt-5">
-        Already have an account?{" "}
-        <Link className="text-blue-700 font-bold" to="/signin">
-          Sign In
-        </Link>
-      </p>
     </div>
-  );
+  )
 }
 
-export default SignUp;
+export default SignUp
